@@ -1,0 +1,186 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="row g-3">
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100" data-bs-toggle="modal" data-bs-target="#sqlBaglantiAyarlari">SQL Bağlantı Ayarları</button>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100" data-bs-toggle="modal" data-bs-target="#kullaniciAyarlari">Kullanıcı Ayarları</button>
+    </div>
+    <div class="col-md-2">
+        <a asp-action="Log" asp-controller="Settings" class="btn btn-primary btn-sm btn-outline w-100">Log Takip</a>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100">**** Ayarları</button>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100">**** Ayarları</button>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100">**** Ayarları</button>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm btn-outline w-100">**** Ayarları</button>
+    </div>
+</div>
+
+<!-- #region name -->
+
+
+
+<!-- Modal SQL Bağlantı Ayarları -->
+<div class="modal fade" id="sqlBaglantiAyarlari" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sqlBaglantiAyarlariLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sqlBaglantiAyarlariLabel">SQL Bağlantı Ayarları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="server" class="form-label">Sunucu Adresi</label>
+                        <input type="text" class="form-control" id="server" name="server" placeholder="Sunucu adresini girin" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="database" class="form-label">Veritabanı</label>
+                        <input type="text" class="form-control" id="database" name="database" placeholder="Veritabanı adını girin" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Kullanıcı adını girin" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Şifre</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Şifrenizi girin" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="schema" class="form-label">Şema</label>
+                        <input type="text" class="form-control" id="schema" name="schema" placeholder="Şema adını girin" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal SQL Bağlantı Ayarları -->
+<div class="modal fade" id="kullaniciAyarlari" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="kullaniciAyarlariLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kullaniciAyarlariLabel">Kullanıcı Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="kullaniciEkleForm">
+                    <div class="mb-3">
+                        <label for="kullaniciAra" class="form-label">Kullanıcı Ara</label>
+                        <input type="text" class="form-control" id="kullaniciAra" placeholder="Kullanıcı adı veya e-posta ile ara">
+                        <button type="button" id="btnKullaniciAra" class="btn btn-secondary mt-2">Ara</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Tam Adı</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-posta</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Şifre</label>
+                        <input type="password" class="form-control" id="inpPassword" name="password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rol</label>
+                        <select class="form-control" id="role" name="role" required>
+                            <option value="0">Kullanıcı</option>
+                            <option value="1">Admin</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="btnKullaniciEkle">Oluştur</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+         $(document).ready(function() {
+        // Kullanıcı Ara butonu için event listener
+        $("#btnKullaniciAra").click(function() {
+            kullaniciAra();
+        });
+
+        // Kullanıcı Ekle butonu için event listener
+        $("#btnKullaniciEkle").click(function() {
+            kullaniciEkle();
+        });
+
+            function kullaniciAra() {
+        var query = $("#kullaniciAra").val();
+        fetch(`/Settings/KullaniciAra?query=${query}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log("API Yanıtı:", data); // Yanıtı konsola yazdır
+                if (data && data.length > 0) {
+                    $("#fullName").val(data[0].fullName); // FullName alanını doldur
+                    $("#email").val(data[0].eMail); // EMail alanını doldur
+                    toastr.success("Kullanıcı bilgileri başarıyla alındı.");
+                } else {
+                    toastr.warning("Kullanıcı bulunamadı.");
+                }
+            })
+            .catch(error => {
+                // console.error('Hata:', error);
+                toastr.error("Kullanıcı aranırken bir hata oluştu: " + error.message);
+            });
+    }
+
+        // Kullanıcı Ekle fonksiyonu
+        function kullaniciEkle() {
+            var fullName = $("#fullName").val();
+            var email = $("#email").val();
+            var password = $("#inpPassword").val();
+            var role = $("#role").val();
+
+            fetch('/Settings/KullaniciEkle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fullName, email, password,role })
+            })
+            .then(response => {
+                if (response.ok) {
+                    toastr.success("Kullanıcı başarıyla eklendi."); // Başarılı mesaj
+                    location.reload();
+                } else {
+                    toastr.error("Kullanıcı eklenirken bir hata oluştu."); // Hata mesajı
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                // toastr.error("Kullanıcı eklenirken bir hata oluştu."); // Hata mesajı
+            });
+        }
+    });
+</script>
