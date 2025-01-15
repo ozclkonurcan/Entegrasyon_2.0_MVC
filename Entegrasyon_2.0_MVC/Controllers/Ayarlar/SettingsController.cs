@@ -38,44 +38,100 @@ public class SettingsController : BaseController
 		return View();
 	}
 
+	#region Log Ayarları
+
+
 	[Authorize]
 	[HttpGet]
 	public async Task<IActionResult> Log()
 	{
 		// Sayfa ilk açıldığında bugünün tarihini al
 		var today = DateTime.Today;
-		return await LogByDate(today); // LogByDate action'ını çağır
+		return await LogByDate(today,null,null); // LogByDate action'ını çağır
 	}
-
 	[Authorize]
 	[HttpGet]
-	public async Task<IActionResult> LogByDate(DateTime date)
+	public async Task<IActionResult> LogByDate(DateTime date, string? level = null, string? kullaniciAdi = null)
 	{
 		try
 		{
-			var logResponse = await _apiService.GetAsync<LogResponse>($"api/AuditLogs/by-date?date={date:yyyy-MM-dd}");
+			// API'ye gönderilecek sorgu parametrelerini oluştur
+			var queryParams = new Dictionary<string, string>
+		{
+			{ "date", date.ToString("yyyy-MM-dd") }
+		};
+
+			if (!string.IsNullOrEmpty(level))
+			{
+				queryParams.Add("level", level);
+			}
+
+			if (!string.IsNullOrEmpty(kullaniciAdi))
+			{
+				queryParams.Add("kullaniciAdi", kullaniciAdi);
+			}
+
+			// Query parametrelerini URL'ye ekle
+			var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+			var apiUrl = $"api/AuditLogs/by-date?{queryString}";
+
+			// API'den logları çek
+			var logResponse = await _apiService.GetAsync<LogResponse>(apiUrl);
 
 			// Logları ters sırala (en yeni log en üstte)
 			var sortedLogs = logResponse.Logs.OrderByDescending(l => l.TimeStamp).ToList();
 
+			// ViewBag'e logları ve diğer bilgileri ekle
 			ViewBag.logResponse = sortedLogs;
 			ViewBag.SelectedDate = date;
 			ViewBag.TotalLogs = sortedLogs.Count;
+			ViewBag.SelectedLevel = level;
+			ViewBag.SelectedKullaniciAdi = kullaniciAdi;
 
-			// Yeni loglar geldiğinde SignalR ile bildirim gönder
-			//await _hubContext.Clients.All.SendAsync("SendLogUpdate");
+			// Yeni loglar geldiğinde SignalR ile bildirim gönder (isteğe bağlı)
+			// await _hubContext.Clients.All.SendAsync("SendLogUpdate");
 
 			return View("Log");
 		}
 		catch (Exception ex)
 		{
+			// Hata durumunda ViewBag'e hata mesajını ve boş log listesini ekle
 			ViewBag.logResponse = new List<LogDto>();
-			ViewBag.ErrorMessage = "Loglar alınırken bir hata oluştu.";
+			ViewBag.ErrorMessage = "Loglar alınırken bir hata oluştu: " + ex.Message;
 			ViewBag.TotalLogs = 0;
 			return View("Log");
 		}
 	}
+	//[Authorize]
+	//[HttpGet]
+	//public async Task<IActionResult> LogByDate(DateTime date,string? level,string? kullaniciAdi)
+	//{
+	//	try
+	//	{
+	//		var logResponse = await _apiService.GetAsync<LogResponse>($"api/AuditLogs/by-date?date={date:yyyy-MM-dd}");
 
+	//		// Logları ters sırala (en yeni log en üstte)
+	//		var sortedLogs = logResponse.Logs.OrderByDescending(l => l.TimeStamp).ToList();
+
+	//		ViewBag.logResponse = sortedLogs;
+	//		ViewBag.SelectedDate = date;
+	//		ViewBag.TotalLogs = sortedLogs.Count;
+
+	//		// Yeni loglar geldiğinde SignalR ile bildirim gönder
+	//		//await _hubContext.Clients.All.SendAsync("SendLogUpdate");
+
+	//		return View("Log");
+	//	}
+	//	catch (Exception ex)
+	//	{
+	//		ViewBag.logResponse = new List<LogDto>();
+	//		ViewBag.ErrorMessage = "Loglar alınırken bir hata oluştu.";
+	//		ViewBag.TotalLogs = 0;
+	//		return View("Log");
+	//	}
+	//}
+
+	#endregion
 
 	[HttpPost]
 	public async Task<IActionResult> sqlBaglatinAyarlari([FromBody] ConnectionSettingsRequest requestModel)

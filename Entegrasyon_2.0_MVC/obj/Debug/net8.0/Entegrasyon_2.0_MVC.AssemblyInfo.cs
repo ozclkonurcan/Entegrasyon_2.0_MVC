@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Entegrasyon_2.0_MVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4fa4de39c271f8a1bc68b90bc619ab64d730ab57")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57c534705cf9ac57e855a9e860cf327f1ad73609")]
 [assembly: System.Reflection.AssemblyProductAttribute("Entegrasyon_2.0_MVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Entegrasyon_2.0_MVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
